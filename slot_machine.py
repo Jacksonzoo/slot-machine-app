@@ -9,34 +9,49 @@ COLS = 3
 
 symbol_count = {
     "7": 2,
-    "$": 5,
-    "%": 8,
+    "$": 3,
+    "%": 6,
     "&": 10,
-    "#": 13,
-    "@": 15
+    "#": 15,
+    "@": 20,
+    "W": 5  # Wild symbol
 }
 
 symbol_values = {
-    "7": 100,
-    "$": 80,
-    "%": 60,
-    "&": 40,
-    "#": 30,
-    "@": 20
+    "7": 200,
+    "$": 100,
+    "%": 50,
+    "&": 20,
+    "#": 10,
+    "@": 5,
+    "W": 0  # Wild has no standalone value
 }
+
 
 def check_winnings(columns, lines, bet, values):
     winnings = 0
     winning_lines = []
     for line in range(lines):
-        symbol = columns[0][line]
+        base_symbol = None
+        is_winner = True
+        wild_count = 0
         for column in columns:
-            if symbol != column[line]:
-                break
-        else:
-            winnings += values[symbol] * bet
-            winning_lines.append(line + 1)  # Correct line number
+            symbol_to_check = column[line]
+            if symbol_to_check == "W":
+                wild_count += 1
+            else:
+                if base_symbol is None:
+                    base_symbol = symbol_to_check
+                elif symbol_to_check != base_symbol:
+                    is_winner = False
+                    break
+        if is_winner and base_symbol == "7" and wild_count > 0:
+            is_winner = False
+        if is_winner and base_symbol is not None:
+            winnings += values[base_symbol] * bet
+            winning_lines.append(line + 1)
     return winnings, winning_lines
+
 
 def get_slot_machine_spin(rows, cols, symbols):
     all_symbols = []
@@ -55,6 +70,7 @@ def get_slot_machine_spin(rows, cols, symbols):
     
     return columns
 
+
 def print_slot_machine(columns):
     for row in range(len(columns[0])):
         for i, col in enumerate(columns):
@@ -63,6 +79,7 @@ def print_slot_machine(columns):
             else:
                 print(col[row], end=" ")
         print()
+
 
 def deposit():
     while True:
@@ -76,6 +93,7 @@ def deposit():
                 print("Amount must be greater than 0.")
         else:
             print("Please enter a valid number.")
+
 
 def get_number_of_lines():
     while True:
@@ -91,6 +109,7 @@ def get_number_of_lines():
         else:
             print("Please enter a valid number.")
 
+
 def get_bet():
     while True:
         amount = input(f"What amount would you like to bet on each line (${MIN_BET} - ${MAX_BET}) or press 'q' to quit: ").lower()
@@ -104,6 +123,7 @@ def get_bet():
                 print(f"Amount must be between ${MIN_BET} and ${MAX_BET}.")
         else:
             print("Please enter a valid number.")
+
 
 def spin(balance, lines, bet):
     total_bet = bet * lines
@@ -119,6 +139,7 @@ def spin(balance, lines, bet):
     else:
         print("No winning lines.")
     return balance
+
 
 def main():
     balance = deposit()
@@ -154,5 +175,6 @@ def main():
                     print(f"You do not have enough to bet that amount. Your current balance is ${balance}.")
                     break
                 balance = spin(balance, lines, bet)
+
 
 main()
