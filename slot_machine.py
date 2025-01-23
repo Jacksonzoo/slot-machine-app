@@ -1,7 +1,7 @@
 import random
 
 MAX_LINES = 3
-MAX_BET = 500
+MAX_BET = 1000
 MIN_BET = 1
 
 ROWS = 3
@@ -10,11 +10,12 @@ COLS = 3
 symbol_count = {
     "7": 2,
     "$": 3,
-    "%": 6,
+    "%": 5,
     "&": 10,
     "#": 15,
     "@": 20,
-    "W": 5  # Wild symbol
+    "?": 25,
+    "W": 10  # Wild symbol
 }
 
 symbol_values = {
@@ -24,9 +25,9 @@ symbol_values = {
     "&": 20,
     "#": 10,
     "@": 5,
+    "?": 1,
     "W": 0  # Wild has no standalone value
 }
-
 
 def check_winnings(columns, lines, bet, values):
     winnings = 0
@@ -175,6 +176,5 @@ def main():
                     print(f"You do not have enough to bet that amount. Your current balance is ${balance}.")
                     break
                 balance = spin(balance, lines, bet)
-
 
 main()
