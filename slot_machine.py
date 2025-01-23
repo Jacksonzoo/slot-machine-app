@@ -1,24 +1,28 @@
 import random
 
 MAX_LINES = 3
-MAX_BET = 100
+MAX_BET = 500
 MIN_BET = 1
 
 ROWS = 3
 COLS = 3
 
 symbol_count = {
-    "A" : 2,
-    "B" : 4,
-    "C" : 6,
-    "D" : 8
+    "7" : 2,
+    "$" : 5,
+    "%" : 8,
+    "&" : 10,
+    "#" : 13,
+    "@" : 15
 }
 
 symbol_values = {
-    "A" : 5,
-    "B" : 4,
-    "C" : 3,
-    "D" : 2
+    "7" : 100,
+    "$" : 80,
+    "%" : 60,
+    "&" : 40,
+    "#" : 30,
+    "@" : 20
 }
 
 def check_winnings(columns, lines, bet, values):
@@ -111,8 +115,7 @@ def get_bet():
     return amount
 
 
-def spin(balance):
-    lines = get_number_of_liines()
+def spin(balance, lines):
     while True:
         bet = get_bet()
         total_bet = bet * lines
@@ -134,12 +137,14 @@ def spin(balance):
 
 def main():
     balance = deposit()
+    lines = get_number_of_liines()
     while True:
         print(f"Current balance is ${balance}")
         answer = input("Press enter to spin (q to quit). ").lower()
         if answer == "q":
             break
-        balance += spin(balance)
+        balance += spin(balance, lines)
+
     print(f"You left with ${balance}")
     
 
